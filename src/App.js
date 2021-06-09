@@ -13,11 +13,14 @@ const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
     background: '#262935',
-    position:'absolute',
+
   },
   content:{
-    textAlign:'center'
-  }
+    textAlign:'center',
+    
+
+  },
+
  
 }));
 
@@ -27,23 +30,30 @@ function App() {
   return (
     <ThemeProvider theme={theme} >
      
-      <Grid container  
+      <Grid 
+      container  
       className={classes.root}
-      
       >
     
-        <Container 
-        
-        >
+        <Container>
           <Grid item xs={12}>
             <Header/>
           </Grid>
-          <Grid item xs={12} >
-          <Buscador/>
+          <Grid item xs={12} className={classes.content} >
+            <Buscador/>
+          </Grid>
+          <Grid item xs={12} className={classes.bottomAppbar} >
+            <Appbar />
           </Grid>
         </Container>
+
       </Grid>
-      <Appbar/>
+      <Grid container >
+
+      
+        
+      </Grid>
+     
     </ThemeProvider>
   );
 }

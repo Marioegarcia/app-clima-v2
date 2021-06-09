@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
+import _ from 'underscore';
 
 import { getCiudadApi, getClimaApi } from '../../api/clima';
 import { Resultado } from './Resultado';
@@ -9,23 +9,39 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
-       
+        marginBottom: 5,
         "& .MuiInputLabel-outlined:not(.MuiInputLabel-shrink)": {
              transform: "translate(34px, 20px) scale(1);"
           }
   
     },
-    inputRoot: {
+    input: {
        
-        flex: 1,
-        textAlign:'center',
-        color:'#ffffff',
-        "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#386391"
+        color:'#01afec',
+      
+        // "& .MuiOutlinedInput-notchedOutline": {
+        //     borderColor: "#38648f",
+            
+        // },
+        '& label.Mui-focused': {
+            color: '#0082c8',
         },
-        marginBottom: 50,
+        '& .MuiInput-underline:after': {
+            borderBottomColor: '#0082c8',
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: '#01afec',
+            },
+            '&:hover fieldset': {
+              borderColor: 'yellow',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#0082c8',
+            },
+        }
     },
 
   
@@ -43,8 +59,13 @@ export const Buscador = () => {
     const loading = open && coord.length === 0;
     const [isMounted, setIsMounted] = useState(false);
     const [isCorrect, setIsCorrect] = useState(false);
+    
+    
+    
+    
+    
     useEffect(() => {
-        
+       
         if (coord.length >= 1) {
              getCiudadApi(coord).then(function (response) {
                 setCiudad(response.message);  
@@ -55,35 +76,45 @@ export const Buscador = () => {
         }
     
 
-    }, [coord])
+    }, [coord,open])
    
 
    
-    const handleChange = ({target}) => {
-        setCoord(target.value);
+    const handleChange = (e) => {
+        setCoord(e.target.value); 
     }
     const temp = async(e,center) => {   
        e.preventDefault();
        
         if (center) {
             const result = await getClimaApi(center); 
-           
+          
            
             setTemperatura(result); 
             setIsMounted(true);
             setIsCorrect(false);
         }else{
             setIsCorrect(true);
-        }
+        }        
+    }
+    const tempDown = async(e) => {   
         
        
+        const {message} = await getCiudadApi(e);
+        console.log(message);
+        const center = message[0].center;
         
-  
-        
-      
-        
-    }
-
+        const result = await getClimaApi(center);
+        console.log(result);
+        if (result.ok) {
+            setTemperatura(result); 
+            setIsMounted(true);
+            setIsCorrect(false);
+        }else{
+            setIsCorrect(true);
+        }
+           
+     }
  
 
 
@@ -92,7 +123,6 @@ export const Buscador = () => {
         <>  
             <Autocomplete
             id="combo-box-demo"
-           
             open={open}
             onOpen={() => {
                 setOpen(true);
@@ -101,11 +131,17 @@ export const Buscador = () => {
                 setOpen(false);
             }}
             onChange={(e,value)=> { 
+                
                 if (value) {
-                    temp(e,value?.center)
+                   
+                   if (_.isString(value)) {
+                       tempDown(value);
+                   }else{
+                     temp(e,value?.center);   
+                   }
+
                 }      
             }}
-            
             freeSolo
             loading={loading}
             options={ciudad}
@@ -118,6 +154,10 @@ export const Buscador = () => {
                 className={classes.input}
                 label="Search City"
                 variant="outlined"
+                color="secondary"
+                InputLabelProps={{
+                    className: classes.input
+                }}
                 /> 
 
                 </>

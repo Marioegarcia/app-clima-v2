@@ -6,11 +6,11 @@ import Container from '@material-ui/core/Container';
 
 import Logo from '../../assets/img/png/logo1F.png'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     root: {
       backgroundColor:'#223647',
-      height:'100vh',
-      width:'50vw',
+        height:'100vh',
+      width:'90vw',
       paddingTop:'10%',
       
     },

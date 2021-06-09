@@ -17,18 +17,24 @@ const useStyles = makeStyles((theme) => ({
         '& > * + *': {
           marginLeft: theme.spacing(2),
         },
-        color:'#ffffff'
+        color:'#ffffff',
+        backgroundColor: '#323543',
+       
     },
     appBar: {
         top: 'auto',
         bottom: 0,
         color:'#ffffff',
         backgroundColor: '#323543',
+       
         
     },
     grow: {
         flexGrow: 1,
     },
+    drawer:{
+        backgroundColor:'#223647',
+    }
    
 }));
 export const Appbar = () => {
@@ -48,7 +54,9 @@ export const Appbar = () => {
 
     return (
         <>
-            <AppBar position="fixed" color="primary" className={classes.appBar}>
+            <AppBar 
+            position="fixed" 
+            className={classes.appBar}>
                 <Toolbar>
                     
                     <Typography className={classes.root}>
@@ -66,6 +74,7 @@ export const Appbar = () => {
 
 
             <SwipeableDrawer
+            className={classes.drawer}
             anchor='right'
             open={state}
             onClose={toggleDrawer(false)}
