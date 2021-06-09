@@ -101,11 +101,11 @@ export const Buscador = () => {
         
        
         const {message} = await getCiudadApi(e);
-        console.log(message);
+        
         const center = message[0].center;
         
         const result = await getClimaApi(center);
-        console.log(result);
+       
         if (result.ok) {
             setTemperatura(result); 
             setIsMounted(true);
